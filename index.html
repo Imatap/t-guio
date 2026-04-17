@@ -1,0 +1,773 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>T-GUIO</title>
+  <style>
+    :root{
+      --bg1:#edf3f0;
+      --bg2:#dfe9e4;
+      --card:#f9fbfa;
+      --text:#1f3d36;
+      --muted:#6e837d;
+      --line:#d5e2dc;
+      --primary:#159365;
+      --primary-2:#78d4bd;
+      --soft-blue:#eef4ff;
+      --soft-blue-border:#bccdf4;
+      --soft-red:#faeeee;
+      --soft-red-border:#efc5c5;
+      --shadow:0 10px 30px rgba(34, 73, 62, .08);
+      --radius:22px;
+    }
+
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+      background: linear-gradient(180deg, var(--bg1), var(--bg2));
+      color:var(--text);
+      min-height:100vh;
+      padding:14px 10px 28px;
+    }
+
+    .app{
+      width:min(100%, 430px);
+      margin:0 auto;
+    }
+
+    .header{
+      display:flex;
+      align-items:flex-start;
+      gap:12px;
+      margin-bottom:12px;
+      padding:4px 4px 0;
+    }
+
+    .logo-box{
+      width:84px;
+      height:52px;
+      border-radius:12px;
+      background:#fff;
+      box-shadow: var(--shadow);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      border:1px solid #edf2ef;
+      flex-shrink:0;
+      overflow:hidden;
+      padding:6px 8px;
+    }
+
+    .logo-badge{
+      display:flex;
+      align-items:center;
+      gap:6px;
+      padding:4px 8px;
+      border-radius:10px;
+      background:linear-gradient(180deg,#f6faf7,#edf6f1);
+      border:1px solid #e0ece6;
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.8);
+    }
+
+    .logo-mark{width:18px;height:18px;display:block;flex-shrink:0}
+
+    .logo-word{
+      font-size:13px;
+      line-height:1;
+      font-weight:900;
+      color:#388a44;
+      letter-spacing:-.2px;
+      white-space:nowrap;
+    }
+
+    .title h1{
+      margin:0;
+      font-size:16px;
+      line-height:1.15;
+      letter-spacing:.2px;
+    }
+
+    .title p{
+      margin:3px 0 0;
+      color:var(--muted);
+      font-size:12px;
+      line-height:1.2;
+      max-width:220px;
+    }
+
+    .top-actions{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:10px;
+      margin-bottom:12px;
+    }
+
+    .btn{
+      border:none;
+      border-radius:18px;
+      padding:14px 14px;
+      font-weight:700;
+      font-size:15px;
+      line-height:1.1;
+      background:#fff;
+      color:var(--primary);
+      box-shadow: var(--shadow);
+      cursor:pointer;
+      transition:transform .15s ease, box-shadow .15s ease, opacity .15s ease;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .btn:active{transform:scale(.985)}
+    .btn:disabled{opacity:.55;cursor:not-allowed}
+
+    .btn-main{
+      background: linear-gradient(90deg, var(--primary-2), var(--primary));
+      color:#fff;
+    }
+
+    .btn-outline{
+      background:#fff;
+      color:var(--primary);
+      border:1px solid var(--line);
+      box-shadow:none;
+    }
+
+    .btn-danger{
+      background:var(--soft-red);
+      color:#c54a44;
+      border:1px solid var(--soft-red-border);
+      box-shadow:none;
+    }
+
+    .panel{
+      background:rgba(255,255,255,.72);
+      backdrop-filter: blur(10px);
+      border:1px solid rgba(255,255,255,.65);
+      border-radius:28px;
+      box-shadow: var(--shadow);
+      padding:16px;
+    }
+
+    .pill{
+      display:inline-block;
+      padding:7px 12px;
+      border-radius:999px;
+      background:#eef4ef;
+      color:var(--primary);
+      font-weight:800;
+      font-size:12px;
+      letter-spacing:.5px;
+      margin-bottom:14px;
+    }
+
+    .location-card{
+      border:1.5px solid var(--soft-blue-border);
+      background:var(--soft-blue);
+      border-radius:18px;
+      padding:14px;
+      margin-bottom:14px;
+    }
+
+    .location-card .label{
+      font-size:12px;
+      font-weight:700;
+      color:#556989;
+      margin-bottom:3px;
+    }
+
+    .location-card .place{
+      font-size:17px;
+      font-weight:800;
+    }
+
+    .section-label{
+      font-size:13px;
+      font-weight:700;
+      margin:8px 2px 8px;
+    }
+
+    .select-box{
+      border:1px solid var(--line);
+      border-radius:18px;
+      background:#fbfdfc;
+      padding:12px 14px 10px;
+      margin-bottom:10px;
+    }
+
+    select{
+      width:100%;
+      border:none;
+      outline:none;
+      background:transparent;
+      color:var(--text);
+      font-weight:800;
+      font-size:15px;
+      appearance:auto;
+      padding:0;
+    }
+
+    .hint{
+      color:var(--muted);
+      font-size:12px;
+      font-weight:600;
+      margin-top:4px;
+    }
+
+    .stack{display:grid;gap:12px}
+
+    .services{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:10px;
+      margin-top:4px;
+    }
+
+    .service-btn{
+      border:1px solid var(--line);
+      background:#fff;
+      color:#1a1a1a;
+      border-radius:14px;
+      padding:12px 8px;
+      font-size:15px;
+      font-weight:500;
+      box-shadow:none;
+    }
+
+    .service-btn span{font-size:14px}
+
+    .route-box{
+      border:1.5px dashed #cfe4db;
+      background:#fbfdfc;
+      border-radius:18px;
+      padding:14px;
+      min-height:120px;
+    }
+
+    .route-title{
+      font-weight:800;
+      margin-bottom:6px;
+    }
+
+    .route-status{
+      color:var(--muted);
+      line-height:1.55;
+      font-size:14px;
+    }
+
+    .steps{
+      margin:10px 0 0;
+      padding-left:22px;
+    }
+
+    .steps li{
+      margin:8px 0;
+      line-height:1.45;
+      font-size:14px;
+    }
+
+    .footer-note{
+      color:var(--muted);
+      font-size:12px;
+      line-height:1.55;
+      margin-top:12px;
+    }
+
+    .app-footer{
+      text-align:center;
+      color:#8c9b96;
+      font-size:12px;
+      margin:18px 0 4px;
+    }
+
+    .scanner-modal{
+      position:fixed;
+      inset:0;
+      background:rgba(18,31,28,.7);
+      display:none;
+      align-items:center;
+      justify-content:center;
+      padding:16px;
+      z-index:30;
+    }
+
+    .scanner-modal.open{display:flex}
+
+    .scanner-card{
+      width:min(100%,420px);
+      background:#fff;
+      border-radius:24px;
+      padding:16px;
+      box-shadow:0 24px 50px rgba(0,0,0,.2);
+    }
+
+    .scanner-card h3{margin:0 0 8px;font-size:18px}
+    .scanner-card p{margin:0 0 12px;color:var(--muted);font-size:14px;line-height:1.45}
+
+    .scanner-video{
+      width:100%;
+      aspect-ratio:3/4;
+      background:#e8efeb;
+      border-radius:18px;
+      object-fit:cover;
+      display:block;
+      margin-bottom:12px;
+    }
+
+    .scanner-status{
+      border:1px dashed var(--line);
+      border-radius:14px;
+      padding:12px;
+      background:#fbfdfc;
+      color:var(--text);
+      font-size:14px;
+      line-height:1.45;
+      margin-bottom:12px;
+    }
+
+    .scanner-actions{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+
+    @media (max-width:380px){
+      .btn{font-size:14px;padding:13px 10px}
+      .service-btn{font-size:14px}
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <div class="header">
+      <div class="logo-box" aria-hidden="true">
+        <div class="logo-badge">
+          <svg class="logo-mark" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path d="M12 22s7-6.2 7-12a7 7 0 1 0-14 0c0 5.8 7 12 7 12z" fill="#58b26f"/>
+            <circle cx="12" cy="10" r="3.2" fill="#fff"/>
+            <circle cx="12" cy="10" r="1.5" fill="#3d9452"/>
+          </svg>
+          <div class="logo-word">T-Guio</div>
+        </div>
+      </div>
+      <div class="title">
+        <h1>T-GUIO</h1>
+        <p>Guía hospitalaria accesible, dinámica y asistida por voz.</p>
+      </div>
+    </div>
+
+    <div class="top-actions">
+      <button class="btn" id="btnVoz">🔊 Voz activada</button>
+      <button class="btn" id="btnRepetir">🔁 Repetir paso</button>
+      <button class="btn" id="btnReiniciar">↺ Reiniciar ruta</button>
+      <button class="btn" id="btnDetener">■ Detener voz</button>
+    </div>
+
+    <div class="panel">
+      <div class="pill">PUNTO T-GUIO</div>
+
+      <div class="location-card">
+        <div class="label">📍 Ubicación actual</div>
+        <div class="place" id="ubicacionActual">Entrada de hospitalización</div>
+      </div>
+
+      <div class="section-label">Quiero ir a</div>
+
+      <div class="select-box">
+        <select id="destinoPrincipal"></select>
+        <div class="hint">Pulsa aquí para desplegar las opciones</div>
+      </div>
+
+      <div class="select-box" id="subdestinoWrap" style="display:none;">
+        <select id="subdestino"></select>
+        <div class="hint">Selecciona el área concreta</div>
+      </div>
+
+      <div class="stack">
+        <button class="btn btn-main" id="btnComenzar">Comenzar guía</button>
+        <button class="btn btn-outline" id="btnExplicacion">Escuchar explicación</button>
+        <button class="btn btn-danger" id="btnPerdido">Estoy perdido</button>
+      </div>
+
+      <div class="services">
+        <button class="btn service-btn" data-service="Metro"><span>🚇</span> Metro</button>
+        <button class="btn service-btn" data-service="Taxi"><span>🚕</span> Taxi</button>
+        <button class="btn service-btn" data-service="Bus"><span>🚌</span> Bus</button>
+        <button class="btn service-btn" data-service="Baño"><span>🚻</span> Baño</button>
+      </div>
+
+      <div class="route-box" id="routeBox" style="margin-top:14px;">
+        <div class="route-title">Ruta preparada</div>
+        <div class="route-status" id="estadoRuta">Selecciona un destino para preparar la guía paso a paso.</div>
+      </div>
+
+      <div class="footer-note">
+        Si el paciente se pierde, puede usar el botón “Estoy perdido” para abrir la cámara, escanear otro Punto T-GUIO y recalcular la ruta.
+      </div>
+    </div>
+
+    <div class="app-footer">T-GUIO · Prototipo de orientación hospitalaria</div>
+  </div>
+
+  <div class="scanner-modal" id="scannerModal" aria-hidden="true">
+    <div class="scanner-card">
+      <h3>Escanear Punto T-GUIO</h3>
+      <p>Usa la cámara para leer el QR del punto más cercano y recalcular la ruta desde tu posición actual.</p>
+      <video id="scannerVideo" class="scanner-video" playsinline muted></video>
+      <div class="scanner-status" id="scannerStatus">Pulsa “Abrir cámara” para iniciar el escaneo.</div>
+      <div class="scanner-actions">
+        <button class="btn btn-outline" id="btnAbrirCamara">Abrir cámara</button>
+        <button class="btn btn-danger" id="btnCerrarScanner">Cerrar</button>
+      </div>
+    </div>
+  </div>
+
+
+  <script>
+    const voiceState = {
+      enabled: true,
+      currentText: '',
+      currentSteps: [],
+      stepIndex: 0
+    };
+
+    const places = {
+      "Entrada de hospitalización": {
+        label: "Entrada de hospitalización",
+        destinos: {
+          "Cardiología": {
+            subdestinos: {
+              "Consultas 0 a 20": [
+                "Salga recto desde la entrada de hospitalización hasta el vestíbulo principal.",
+                "Continúe hacia la derecha siguiendo la señal de consultas externas.",
+                "Avance por el pasillo principal hasta ver la numeración de consultas.",
+                "Las consultas 0 a 20 quedan en ese tramo, a mano derecha."
+              ],
+              "Consultas 20 a 40": [
+                "Salga recto desde la entrada de hospitalización hasta el vestíbulo principal.",
+                "Gire a la derecha y siga las señales de consultas externas.",
+                "Continúe por el pasillo principal pasando el primer bloque de consultas.",
+                "Las consultas 20 a 40 quedan al final del corredor, a mano izquierda."
+              ],
+              "Secretaría / Admisión": [
+                "Salga recto hasta el vestíbulo principal.",
+                "Diríjase a la zona de atención al paciente, indicada con señalización administrativa.",
+                "Gire a la derecha al llegar al mostrador central.",
+                "La secretaría y admisión de Cardiología están junto al área de consultas."
+              ]
+            }
+          },
+          "Radiología": {
+            pasos: [
+              "Salga recto desde la entrada de hospitalización.",
+              "Manténgase en el corredor principal hasta la intersección señalizada.",
+              "Gire a la izquierda siguiendo la señal de Radiología.",
+              "Continúe hasta el control de acceso del área diagnóstica."
+            ]
+          },
+          "Laboratorio": {
+            pasos: [
+              "Salga recto desde la entrada de hospitalización hacia el vestíbulo.",
+              "Diríjase al pasillo central y siga las señales de extracciones y laboratorio.",
+              "Gire a la derecha en la segunda bifurcación.",
+              "Encontrará el laboratorio al fondo del pasillo."
+            ]
+          },
+          "Urgencias": {
+            pasos: [
+              "Salga de la entrada de hospitalización hacia el exterior del vestíbulo.",
+              "Siga la señalización roja de Urgencias.",
+              "Avance recto por el corredor cubierto.",
+              "La entrada de Urgencias queda al final del recorrido."
+            ]
+          }
+        }
+      }
+    };
+
+    const serviceRoutes = {
+      "Metro": [
+        "Salga al exterior por la puerta principal.",
+        "Avance recto hasta la zona de acceso peatonal del hospital.",
+        "Siga la señalización urbana hacia la parada de metro más cercana."
+      ],
+      "Taxi": [
+        "Diríjase a la salida principal del hospital.",
+        "Al salir, gire a la derecha.",
+        "La parada de taxi se encuentra en la zona de recogida de pasajeros."
+      ],
+      "Bus": [
+        "Salga por la entrada principal del recinto.",
+        "Avance hasta la acera exterior señalizada.",
+        "La parada de autobús se sitúa junto al acceso principal."
+      ],
+      "Baño": [
+        "Desde este punto, avance recto por el pasillo principal.",
+        "Gire a la izquierda en la primera señal de servicios.",
+        "El baño se encuentra junto a la sala de espera."
+      ]
+    };
+
+    const ubicacionActual = document.getElementById('ubicacionActual');
+    const destinoPrincipal = document.getElementById('destinoPrincipal');
+    const subdestino = document.getElementById('subdestino');
+    const subdestinoWrap = document.getElementById('subdestinoWrap');
+    const estadoRuta = document.getElementById('estadoRuta');
+    const btnVoz = document.getElementById('btnVoz');
+    const btnRepetir = document.getElementById('btnRepetir');
+    const btnReiniciar = document.getElementById('btnReiniciar');
+    const btnDetener = document.getElementById('btnDetener');
+    const btnComenzar = document.getElementById('btnComenzar');
+    const btnExplicacion = document.getElementById('btnExplicacion');
+    const btnPerdido = document.getElementById('btnPerdido');
+    const scannerModal = document.getElementById('scannerModal');
+    const scannerVideo = document.getElementById('scannerVideo');
+    const scannerStatus = document.getElementById('scannerStatus');
+    const btnAbrirCamara = document.getElementById('btnAbrirCamara');
+    const btnCerrarScanner = document.getElementById('btnCerrarScanner');
+
+    let origenActual = 'Entrada de hospitalización';
+    let scannerStream = null;
+    let scannerInterval = null;
+
+    function speak(text) {
+      voiceState.currentText = text;
+      if (!voiceState.enabled || !('speechSynthesis' in window)) return;
+      window.speechSynthesis.cancel();
+      const utterance = new SpeechSynthesisUtterance(text);
+      utterance.lang = 'es-ES';
+      utterance.rate = 0.95;
+      window.speechSynthesis.speak(utterance);
+    }
+
+    function stopVoice(){
+      if ('speechSynthesis' in window) window.speechSynthesis.cancel();
+    }
+
+    function populateMainDestinations() {
+      const destinos = places[origenActual].destinos;
+      destinoPrincipal.innerHTML = '<option value="">Selecciona tu destino</option>';
+      Object.keys(destinos).forEach(destino => {
+        const option = document.createElement('option');
+        option.value = destino;
+        option.textContent = destino;
+        destinoPrincipal.appendChild(option);
+      });
+      subdestinoWrap.style.display = 'none';
+      subdestino.innerHTML = '';
+    }
+
+    function populateSubdestinations() {
+      const destino = destinoPrincipal.value;
+      const data = places[origenActual].destinos[destino];
+      if (!data || !data.subdestinos) {
+        subdestinoWrap.style.display = 'none';
+        subdestino.innerHTML = '';
+        return;
+      }
+      subdestinoWrap.style.display = 'block';
+      subdestino.innerHTML = '<option value="">Selecciona un área</option>';
+      Object.keys(data.subdestinos).forEach(item => {
+        const option = document.createElement('option');
+        option.value = item;
+        option.textContent = item;
+        subdestino.appendChild(option);
+      });
+    }
+
+    function getCurrentRoute() {
+      const destino = destinoPrincipal.value;
+      if (!destino) return null;
+      const data = places[origenActual].destinos[destino];
+      if (!data) return null;
+      if (data.subdestinos) {
+        const sub = subdestino.value;
+        if (!sub) return null;
+        return {
+          title: `${destino} · ${sub}`,
+          steps: data.subdestinos[sub]
+        };
+      }
+      return {
+        title: destino,
+        steps: data.pasos
+      };
+    }
+
+    function renderRoute(route) {
+      if (!route) {
+        estadoRuta.innerHTML = 'Selecciona un destino para preparar la guía paso a paso.';
+        return;
+      }
+      const stepsHtml = route.steps.map(step => `<li>${step}</li>`).join('');
+      estadoRuta.innerHTML = `
+        <strong>Destino:</strong> ${route.title}<br>
+        <strong>Cómo llegar:</strong>
+        <ol class="steps">${stepsHtml}</ol>
+      `;
+    }
+
+    function explainRoute(route, intro = true) {
+      if (!route) {
+        speak('Primero debes seleccionar un destino para que pueda explicarte cómo llegar.');
+        return;
+      }
+      voiceState.currentSteps = route.steps.slice();
+      voiceState.stepIndex = 0;
+      const introText = intro
+        ? `Estás en ${places[origenActual].label}. Para llegar a ${route.title}, sigue estos pasos. `
+        : '';
+      const allText = introText + route.steps.map((s, i) => `Paso ${i + 1}. ${s}`).join(' ');
+      speak(allText);
+    }
+
+    function repeatCurrentStep() {
+      if (voiceState.currentSteps.length) {
+        const idx = Math.max(0, voiceState.stepIndex - 1);
+        const text = voiceState.currentSteps[idx] || voiceState.currentSteps[0];
+        speak(`Repito el paso. ${text}`);
+      } else if (voiceState.currentText) {
+        speak(voiceState.currentText);
+      } else {
+        speak('Todavía no hay ninguna indicación para repetir.');
+      }
+    }
+
+    function startGuide() {
+      const route = getCurrentRoute();
+      renderRoute(route);
+      if (!route) {
+        speak('Debes seleccionar un destino válido antes de comenzar la guía.');
+        return;
+      }
+      explainRoute(route, true);
+    }
+
+    function resetRoute() {
+      stopVoice();
+      closeScanner();
+      destinoPrincipal.value = '';
+      subdestino.value = '';
+      subdestinoWrap.style.display = 'none';
+      estadoRuta.textContent = 'Selecciona un destino para preparar la guía paso a paso.';
+      voiceState.currentText = '';
+      voiceState.currentSteps = [];
+      voiceState.stepIndex = 0;
+    }
+
+    function openScanner() {
+      stopVoice();
+      scannerModal.classList.add('open');
+      scannerModal.setAttribute('aria-hidden', 'false');
+      scannerStatus.textContent = 'Pulsa “Abrir cámara” para iniciar el escaneo.';
+      speak('Voy a abrir el escáner para localizar el punto T Guio más cercano.');
+    }
+
+    function closeScanner() {
+      scannerModal.classList.remove('open');
+      scannerModal.setAttribute('aria-hidden', 'true');
+      if (scannerInterval) {
+        clearInterval(scannerInterval);
+        scannerInterval = null;
+      }
+      if (scannerStream) {
+        scannerStream.getTracks().forEach(track => track.stop());
+        scannerStream = null;
+      }
+      scannerVideo.srcObject = null;
+    }
+
+    async function startScanner() {
+      if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+        scannerStatus.textContent = 'Este dispositivo no permite abrir la cámara desde este archivo. Abre la app desde navegador o usa el QR manualmente.';
+        speak('No puedo abrir la cámara en este dispositivo.');
+        return;
+      }
+
+      try {
+        if (scannerStream) closeScanner();
+        scannerModal.classList.add('open');
+        scannerStream = await navigator.mediaDevices.getUserMedia({
+          video: { facingMode: { ideal: 'environment' } },
+          audio: false
+        });
+        scannerVideo.srcObject = scannerStream;
+        await scannerVideo.play();
+
+        if (!('BarcodeDetector' in window)) {
+          scannerStatus.textContent = 'Cámara abierta. Si tu móvil no detecta QR automáticamente, acércalo al código del Punto T-GUIO y vuelve a intentarlo desde Chrome o Safari actualizado.';
+          speak('Cámara abierta. Busca el código QR del punto T Guio.');
+          return;
+        }
+
+        const detector = new BarcodeDetector({ formats: ['qr_code'] });
+        scannerStatus.textContent = 'Apunta al QR del Punto T-GUIO.';
+
+        if (scannerInterval) clearInterval(scannerInterval);
+        scannerInterval = setInterval(async () => {
+          try {
+            const codes = await detector.detect(scannerVideo);
+            if (!codes.length) return;
+            const rawValue = (codes[0].rawValue || '').trim();
+            if (rawValue) {
+              handleScannedPoint(rawValue);
+            }
+          } catch (e) {}
+        }, 900);
+      } catch (error) {
+        scannerStatus.textContent = 'No he podido abrir la cámara. Revisa permisos o prueba desde un navegador móvil.';
+        speak('No he podido abrir la cámara.');
+      }
+    }
+
+    function handleScannedPoint(rawValue) {
+      const normalized = rawValue.toLowerCase();
+      if (normalized.includes('entrada')) {
+        origenActual = 'Entrada de hospitalización';
+      }
+      ubicacionActual.textContent = places[origenActual].label;
+      populateMainDestinations();
+      renderRoute(null);
+      scannerStatus.textContent = `Punto detectado: ${places[origenActual].label}. Ya puedes volver a seleccionar destino y comenzar la guía.`;
+      speak(`Punto detectado. Estás en ${places[origenActual].label}. Selecciona de nuevo tu destino para recalcular la ruta.`);
+      closeScanner();
+    }
+
+    destinoPrincipal.addEventListener('change', () => {
+      populateSubdestinations();
+      renderRoute(getCurrentRoute());
+    });
+
+    subdestino.addEventListener('change', () => {
+      renderRoute(getCurrentRoute());
+    });
+
+    btnComenzar.addEventListener('click', startGuide);
+    btnExplicacion.addEventListener('click', () => explainRoute(getCurrentRoute(), true));
+    btnPerdido.addEventListener('click', openScanner);
+
+    btnRepetir.addEventListener('click', repeatCurrentStep);
+    btnReiniciar.addEventListener('click', resetRoute);
+    btnDetener.addEventListener('click', stopVoice);
+    btnAbrirCamara.addEventListener('click', startScanner);
+    btnCerrarScanner.addEventListener('click', closeScanner);
+
+    btnVoz.addEventListener('click', () => {
+      voiceState.enabled = !voiceState.enabled;
+      btnVoz.textContent = voiceState.enabled ? '🔊 Voz activada' : '🔇 Voz desactivada';
+      if (!voiceState.enabled) stopVoice();
+      else speak('La voz está activada.');
+    });
+
+    document.querySelectorAll('.service-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const service = btn.dataset.service;
+        const route = { title: service, steps: serviceRoutes[service] };
+        renderRoute(route);
+        explainRoute(route, true);
+      });
+    });
+
+    populateMainDestinations();
+    ubicacionActual.textContent = places[origenActual].label;
+  </script>
+
+</body>
+</html>
