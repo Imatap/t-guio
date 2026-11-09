@@ -643,17 +643,45 @@
 
     const voiceSelect = document.getElementById('voiceSelect');
     const voiceRate = document.getElementById('voiceRate');
+    let voiceChosenByUser = false;
+
+    // Preferimos específicamente Google español de España, no la voz es-US.
+    function preferredGoogleSpanishVoice(voices) {
+      return voices.find(v =>
+        v.lang.toLowerCase() === 'es-es' &&
+        /google\s+espa[ñn]ol/i.test(v.name)
+      ) || null;
+    }
+
+    voiceSelect.addEventListener('change', () => {
+      voiceChosenByUser = true;
+    });
+
     function refreshVoices(){
       if (!('speechSynthesis' in window)) return;
       const previous = voiceSelect.value;
-      const voices = speechSynthesis.getVoices().filter(v=>v.lang.toLowerCase().startsWith('es'));
+      const voices = speechSynthesis.getVoices().filter(v => v.lang.toLowerCase().startsWith('es'));
       voiceSelect.innerHTML = '<option value="">Automática (español)</option>';
-      voices.forEach(v=>{const o=document.createElement('option');o.value=v.voiceURI;o.textContent=`${v.name} (${v.lang})`;voiceSelect.appendChild(o)});
-      if([...voiceSelect.options].some(o=>o.value===previous))voiceSelect.value=previous;
+      voices.forEach(v => {
+        const option = document.createElement('option');
+        option.value = v.voiceURI;
+        option.textContent = `${v.name} (${v.lang})`;
+        voiceSelect.appendChild(option);
+      });
+
+      const hasPrevious = [...voiceSelect.options].some(o => o.value === previous);
+      const preferred = preferredGoogleSpanishVoice(voices);
+      if (voiceChosenByUser && hasPrevious) {
+        voiceSelect.value = previous;
+      } else if (preferred) {
+        voiceSelect.value = preferred.voiceURI;
+      } else if (hasPrevious) {
+        voiceSelect.value = previous;
+      }
     }
     if ('speechSynthesis' in window) {
       refreshVoices();
-      speechSynthesis.addEventListener?.('voiceschanged',refreshVoices);
+      speechSynthesis.addEventListener?.('voiceschanged', refreshVoices);
     }
     function speak(text) {
       voiceState.currentText = text;
@@ -661,12 +689,13 @@
       window.speechSynthesis.cancel();
       const utterance = new SpeechSynthesisUtterance(text);
       const voices = speechSynthesis.getVoices();
-      const selected = voices.find(v=>v.voiceURI===voiceSelect.value) ||
-        voices.find(v=>v.lang.toLowerCase()==='es-es') ||
-        voices.find(v=>v.lang.toLowerCase().startsWith('es'));
-      if(selected) utterance.voice=selected;
-      utterance.lang=selected?.lang || 'es-ES';
-      utterance.rate=Number(voiceRate.value);
+      const selected = voices.find(v => v.voiceURI === voiceSelect.value) ||
+        preferredGoogleSpanishVoice(voices) ||
+        voices.find(v => v.lang.toLowerCase() === 'es-es') ||
+        voices.find(v => v.lang.toLowerCase().startsWith('es'));
+      if (selected) utterance.voice = selected;
+      utterance.lang = selected?.lang || 'es-ES';
+      utterance.rate = Number(voiceRate.value);
       window.speechSynthesis.speak(utterance);
     }
 
